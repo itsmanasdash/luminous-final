@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Tariff Optimizer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4bb543;
+            --danger: #ff595e;
+            --warning: #ff9e00;
+            --info: #4895ef;
+            --dark: #1b1b1b;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            color: #ffffff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4895ef;
+            margin: 0.5rem 0;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .appliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .appliance-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .appliance-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .appliance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .power-badge {
+            background: var(--info);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+        }
+        
+        .optimal-time {
+            color: var(--success);
+            font-size: 0.875rem;
+            margin: 0.5rem 0;
+        }
+        
+        .avoid-time {
+            color: var(--danger);
+            font-size: 0.875rem;
+            margin: 0.5rem 0;
+        }
+
+        .daily-usage {
+            color: #a0aec0;
+            font-size: 0.875rem;
+            margin: 0.5rem 0;
+        }
+
+        .savings-tip {
+            font-size: 0.75rem;
+            color: var(--warning);
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-w{
+            color: rgba(255, 255, 255, 0.884);
+        }
+        .text-b{
+            color: #1b1b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Smart Solar Savings Optimizer</h1>
+            <p>Optimize your appliance usage based on solar generation and time-of-day tariffs</p>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h3>Current Solar Generation</h3>
+                <div class="metric">4.2 kW</div>
+                <p>Peak generation time: 11:00 AM - 2:00 PM</p>
+            </div>
+            <div class="card">
+                <h3>Today's Savings</h3>
+                <div class="metric">₹285</div>
+                <p>Through smart scheduling</p>
+            </div>
+            <div class="card">
+                <h3>Peak Load Shifted</h3>
+                <div class="metric">8.2 kWh</div>
+                <p>Reduced evening peak consumption</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="usageChart"></canvas>
+        </div>
+
+        <h2>Optimal Appliance Schedule</h2>
+        <div class="appliance-grid">
+            <div class="appliance-card">
+                <div class="appliance-header">
+                    <h3>Air Conditioner</h3>
+                    <span class="power-badge">1.5 kW</span>
+                </div>
+                <p class="daily-usage text-w">Typical usage: 6-8 hours/day</p>
+                <p class="optimal-time">Best hours: 10:00 AM - 4:00 PM</p>
+                <p class="avoid-time">Avoid: 6:00 PM - 10:00 PM</p>
+                <p class="savings-tip">Tip: Pre-cool rooms during solar peak hours</p>
+            </div>
+            <div class="appliance-card">
+                <div class="appliance-header">
+                    <h3>Water Heater</h3>
+                    <span class="power-badge">2.0 kW</span>
+                </div>
+                <p class="daily-usage text-w">Typical usage: 1-2 hours/day</p>
+                <p class="optimal-time">Best hours: 5:00 AM - 7:00 AM</p>
+                <p class="avoid-time">Avoid: 6:00 PM - 9:00 PM</p>
+                <p class="savings-tip">Tip: Use timer function for early morning heating</p>
+            </div>
+            <div class="appliance-card">
+                <div class="appliance-header">
+                    <h3>Washing Machine</h3>
+                    <span class="power-badge">0.6 kW</span>
+                </div>
+                <p class="daily-usage text-w">Typical usage: 1-2 loads/day</p>
+                <p class="optimal-time">Best hours: 10:00 AM - 3:00 PM</p>
+                <p class="avoid-time">Avoid: 7:00 PM - 10:00 PM</p>
+                <p class="savings-tip">Tip: Batch loads during solar peak hours</p>
+            </div>
+            <div class="appliance-card">
+                <div class="appliance-header">
+                    <h3>Microwave Oven</h3>
+                    <span class="power-badge">1.2 kW</span>
+                </div>
+                <p class="daily-usage text-w">Typical usage: 15-30 mins/day</p>
+                <p class="optimal-time">Best hours: 11:00 AM - 2:00 PM</p>
+                <p class="avoid-time">Avoid: 7:00 PM - 9:00 PM</p>
+                <p class="savings-tip">Tip: Plan meals during off-peak hours</p>
+            </div>
+            <div class="appliance-card">
+                <div class="appliance-header">
+                    <h3>Refrigerator</h3>
+                    <span class="power-badge">0.2 kW</span>
+                </div>
+                <p class="daily-usage text-w">Typical usage: 24 hours/day</p>
+                <p class="optimal-time">Peak cooling: 9:00 AM - 4:00 PM</p>
+                <p class="avoid-time">Minimize door opening: 6:00 PM - 10:00 PM</p>
+                <p class="savings-tip">Tip: Set temperature 1°C higher during peak tariff</p>
+            </div>
+            <div class="appliance-card">
+                <div class="appliance-header">
+                    <h3>Electric Cooker</h3>
+                    <span class="power-badge">1.5 kW</span>
+                </div>
+                <p class="daily-usage text-w">Typical usage: 1-2 hours/day</p>
+                <p class="optimal-time">Best hours: 10:00 AM - 4:00 PM</p>
+                <p class="avoid-time">Avoid: 6:00 PM - 9:00 PM</p>
+                <p class="savings-tip">Tip: Cook and store during solar peak hours</p>
+            </div>
+            <div class="appliance-card">
+                <div class="appliance-header">
+                    <h3>Dishwasher</h3>
+                    <span class="power-badge">1.2 kW</span>
+                </div>
+                <p class="daily-usage text-w">Typical usage: 1 cycle/day</p>
+                <p class="optimal-time">Best hours: 2:00 PM - 4:00 PM</p>
+                <p class="avoid-time">Avoid: 8:00 PM - 10:00 PM</p>
+                <p class="savings-tip">Tip: Run full loads during solar peak</p>
+            </div>
+            <div class="appliance-card">
+                <div class="appliance-header">
+                    <h3>Water Pump</h3>
+                    <span class="power-badge">0.75 kW</span>
+                </div>
+                <p class="daily-usage text-w">Typical usage: 1-2 hours/day</p>
+                <p class="optimal-time">Best hours: 11:00 AM - 2:00 PM</p>
+                <p class="avoid-time">Avoid: 6:00 PM - 10:00 PM</p>
+                <p class="savings-tip">Tip: Fill overhead tank during solar peak</p>
+            </div>
+            <div class="appliance-card">
+                <div class="appliance-header">
+                    <h3>Iron</h3>
+                    <span class="power-badge">1.0 kW</span>
+                </div>
+                <p class="daily-usage text-w">Typical usage: 30 mins/day</p>
+                <p class="optimal-time">Best hours: 10:00 AM - 3:00 PM</p>
+                <p class="avoid-time">Avoid: 7:00 PM - 9:00 PM</p>
+                <p class="savings-tip">Tip: Batch iron clothes during weekends</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('usageChart').getContext('2d');
+        const hours = Array.from({length: 24}, (_, i) => `${i}:00`);
+        
+        // Simulate typical Indian household power usage patterns
+        const solarGeneration = hours.map(hour => {
+            const h = parseInt(hour);
+            if (h >= 6 && h <= 18) {
+                return Math.sin((h - 6) * Math.PI / 12) * 5;
+            }
+            return 0;
+        });
+        
+        const usage = hours.map(hour => {
+            const h = parseInt(hour);
+            if (h >= 6 && h <= 9) return 2.5; // Morning peak
+            if (h >= 18 && h <= 22) return 3.5; // Evening peak
+            if (h >= 10 && h <= 17) return 1.5; // Day time
+            return 0.5; // Night time
+        });
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: hours,
+                datasets: [{
+                    label: 'Solar Generation (kW)',
+                    data: solarGeneration,
+                    borderColor: '#ffd700',
+                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                    fill: true
+                }, {
+                    label: 'Power Usage (kW)',
+                    data: usage,
+                    borderColor: '#4895ef',
+                    backgroundColor: 'rgba(72, 149, 239, 0.1)',
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#ffffff'
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Daily Power Generation vs Usage',
+                        color: '#ffffff'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

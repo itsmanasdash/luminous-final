@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Energy Management Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="path/to/font-awesome/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .solar-bg {
+            background: linear-gradient(120deg, #1a365d 0%, #2a4365 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .main{
+            background-image:url('images/imagebg copy.png');
+        }
+        .text-black-500{
+            color : black;
+        }
+        .bg-white{
+            background-color: white;
+        }
+        .solar-panel {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(45deg, transparent 45%, #ffffff0d 45%, #ffffff0d 55%, transparent 55%),
+                linear-gradient(-45deg, transparent 45%, #ffffff0d 45%, #ffffff0d 55%, transparent 55%);
+            background-size: 30px 30px;
+            opacity: 0.1;
+        }
+
+        .sun-glow {
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ffd700 0%, transparent 70%);
+            opacity: 0.3;
+            animation: glow 4s infinite alternate;
+        }
+        .bg-dark{
+            background-color: black;
+        }
+
+        @keyframes glow {
+            from { opacity: 0.2; }
+            to { opacity: 0.4; }
+        }
+
+        .feature-card {
+            background: rgba(6, 186, 241, 0.791);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon-container {
+            background: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body">
+    <div class="solar-bg min-h-screen text-white main">
+        <!-- Solar Panel Pattern Background -->
+        <div class="solar-panel"></div>
+        
+        <!-- Animated Sun Glow -->
+        <div class="sun-glow"></div>
+
+        <!-- Main Content -->
+        <div class="container mx-auto px-4 py-12 relative">
+            <!-- Hero Section -->
+            <div class="text-center mb-16">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                    Smart Solar Energy Management1
+                </h1>
+                <p class="text-xl text-blue-100 max-w-3xl mx-auto text-black-500" style="font-weight: bold;">
+                    Optimize your solar energy usage with our Time-of-Use platform.
+                </p>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Real-time Tariff Monitoring -->
+                <div class="feature-card rounded-xl p-6">
+                    <a href="files/tod-monitor-converted.html">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="icon-container mb-4">
+                                <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-black-500">Real-time Tariff Monitoring</h3>
+                            <p class="text-blue-100 text-black-500">Track live electricity rates and optimize your energy usage</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Energy Consumption Analytics -->
+                <div class="feature-card rounded-xl p-6">
+                    <a href="files/energyconsumption.html">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="icon-container mb-4">
+                                <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-black-500">Energy Consumption Analytics</h3>
+                            <p class="text-blue-100 text-black-500">Detailed insights into your power consumption patterns</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Smart Scheduling -->
+                <div class="feature-card rounded-xl p-6">
+                    <a href="files/smart-scheduling.html">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="icon-container mb-4">
+                                <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-black-500">Smart Scheduling</h3>
+                            <p class="text-blue-100 text-black-500">Automate your energy usage during optimal pricing periods</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Cost Benefit Analysis -->
+                <div class="feature-card rounded-xl p-6">
+                    <a href="files/solar-savings-tracker.html">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="icon-container mb-4">
+                                <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-black-500">Cost Benefit Analysis</h3>
+                            <p class="text-blue-100 text-black-500">Calculate savings and ROI from solar investment</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Forecasting & Solar Energy Generation -->
+                <div class="feature-card rounded-xl p-6">
+                    <a href="files/solarenergy.html">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="icon-container mb-4">
+                                <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-black-500">Forecasting & Solar Energy Generation</h3>
+                            <p class="text-blue-100 text-black-500">Predict solar generation and optimize energy storage</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Notifications & Savings -->
+                <div class="feature-card rounded-xl p-6">
+                    <a href="files/solar-notifications-expanded.html">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="icon-container mb-4">
+                                <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-black-500">Notifications & Savings</h3>
+                            <p class="text-blue-100 text-black-500">Get alerts for peak pricing and savings opportunities</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      z-index: 1;
+      padding: 20px;
+    }
+ 
+    .sun {
+      position: fixed;
+      top: 50px;
+      right: 50px;
+      width: 100px;
+      height: 100px;
+      background: #ffd60a;
+      border-radius: 50%;
+      box-shadow: 0 0 60px #ff8c42;
+      animation: pulse 4s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 60px #ff8c42; }
+      50% { transform: scale(1.1); box-shadow: 0 0 80px #ff8c42; }
+      100% { transform: scale(1); box-shadow: 0 0 60px #ff8c42; }
+    }
+
+    .notification {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .notification:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .notification-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .notification-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .success { background: #4CAF50; }
+    .warning { background: #FFC107; }
+    .error { background: #f44336; }
+    .info { background: #2196F3; }
+
+    .notification-title {
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 5px;
+    }
+
+    .notification-time {
+      font-size: 0.8em;
+      opacity: 0.7;
+    }
+
+    .notification-body {
+      line-height: 1.5;
+    }
+
+    .rays {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(255, 214, 10, 0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    @keyframes floatAnimation {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .floating {
+      animation: floatAnimation 4s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="rays"></div>
+  <div class="sun"></div>
+  
+  <div class="container">
+    <div class="notification floating">
+      <div class="notification-header">
+        <div class="notification-icon warning"></div>
+        <div>
+          <div class="notification-title">Low Solar Production</div>
+          <div class="notification-time">Just now</div>
+        </div>
+      </div>
+      <div class="notification-body">
+        Today, your solar energy production is lower than usual (only 8 kWh vs. your average of 12 kWh). Consider shifting high-energy tasks to off-peak times.
+      </div>
+    </div>
+
+    <div class="notification floating">
+      <div class="notification-header">
+        <div class="notification-icon success"></div>
+        <div>
+          <div class="notification-title">Grid Optimization</div>
+          <div class="notification-time">5 minutes ago</div>
+        </div>
+      </div>
+      <div class="notification-body">
+        Great job! Today, 75% of your total energy consumption (9 kWh) came from solar power, reducing your reliance on the grid and saving you money.
+      </div>
+    </div>
+
+    <div class="notification floating">
+      <div class="notification-header">
+        <div class="notification-icon info"></div>
+        <div>
+          <div class="notification-title">Battery Storage</div>
+          <div class="notification-time">15 minutes ago</div>
+        </div>
+      </div>
+      <div class="notification-body">
+        With 12 kWh generated today, you have a surplus of solar energy. Consider storing it for peak tariff times to maximize savings.
+      </div>
+    </div>
+
+    <div class="notification floating">
+      <div class="notification-header">
+        <div class="notification-icon error"></div>
+        <div>
+          <div class="notification-title">High Consumption</div>
+          <div class="notification-time">30 minutes ago</div>
+        </div>
+      </div>
+      <div class="notification-body">
+        Today, your energy consumption has spiked to 18 kWh, compared to your daily average of 12 kWh. Consider reducing non-essential usage.
+      </div>
+    </div>
+
+    <div class="notification floating">
+      <div class="notification-header">
+        <div class="notification-icon warning"></div>
+        <div>
+          <div class="notification-title">Peak Time Alert</div>
+          <div class="notification-time">1 hour ago</div>
+        </div>
+      </div>
+      <div class="notification-body">
+        You've used 6 kWh during peak pricing today. Consider shifting tasks to off-peak hours to save on your next bill.
+      </div>
+    </div>
+
+    <div class="notification floating">
+      <div class="notification-header">
+        <div class="notification-icon success"></div>
+        <div>
+          <div class="notification-title">Monthly Savings</div>
+          <div class="notification-time">2 hours ago</div>
+        </div>
+      </div>
+      <div class="notification-body">
+        This week, you've saved approximately $20 by using solar power during peak hours and shifting high-energy tasks to off-peak times.
+      </div>
+    </div>
+
+    <div class="notification floating">
+      <div class="notification-header">
+        <div class="notification-icon error"></div>
+        <div>
+          <div class="notification-title">System Alert</div>
+          <div class="notification-time">3 hours ago</div>
+        </div>
+      </div>
+      <div class="notification-body">
+        Your solar power output dropped unexpectedly today. Check your solar panel system for any issues or obstructions.
+      </div>
+    </div>
+
+    <div class="notification floating">
+      <div class="notification-header">
+        <div class="notification-icon info"></div>
+        <div>
+          <div class="notification-title">Weekly Summary</div>
+          <div class="notification-time">4 hours ago</div>
+        </div>
+      </div>
+      <div class="notification-body">
+        This week, you optimized your energy consumption for 75% of low-tariff hours, resulting in $30 savings. Keep it up!
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solar Tariff Optimizer</title>
+  <style>
+    body {
+      background-color: #0f172a;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .card {
+      background-color: rgba(30, 41, 59, 0.5);
+      border: 1px solid #334155;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+    .card h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .alert {
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .alert-yellow {
+      border: 1px solid rgba(234, 179, 8, 0.5);
+      background-color: rgba(30, 41, 59, 0.5);
+    }
+    .alert-blue {
+      border: 1px solid rgba(37, 99, 235, 0.5);
+      background-color: rgba(30, 41, 59, 0.5);
+    }
+    .alert-red {
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      background-color: rgba(30, 41, 59, 0.5);
+    }
+    .appliance-item {
+      background-color: rgba(30, 41, 59, 0.5);
+      border: 1px solid #334155;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .appliance-item h4 {
+      margin: 0;
+      font-size: 18px;
+    }
+    .appliance-item .power {
+      background-color: rgba(37, 99, 235, 0.2);
+      width: 50px;
+      padding: 5px 10px;
+      border-radius: 10px;
+      color: rgba(37, 99, 235, 0.8);
+    }
+    .tips ul {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+    .green{
+      color: green;
+    }
+    .red{
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Power Usage Overview Chart Placeholder -->
+    <div class="card">
+      <h3><span class="icon">📊</span> Power Usage Overview</h3>
+      <div id="chart" style="height: 320px; background-color: #1e293b; color: #fff; text-align: center; padding: 40px; padding-top: 20px; margin-bottom: 10px; padding-bottom: 80px;">
+        <img src="WhatsApp Image 2024-10-24 at 14.52.44.jpeg" alt="" height="390px">
+      </div>
+    </div>
+
+    <!-- Tariff Zones Alerts -->
+    <div class="grid">
+      <div class="alert alert-yellow">
+        <span class="icon">☀️</span>
+        <div>
+          <strong>Solar Peak Hours</strong><br>
+          10:00-16:00 • Best for high-power usage
+        </div>
+      </div>
+      <div class="alert alert-blue">
+        <span class="icon">🔋</span>
+        <div>
+          <strong>Medium Tariff Period</strong><br>
+          06:00-16:00 • Moderate usage optimal
+        </div>
+      </div>
+      <div class="alert alert-red">
+        <span class="icon">⚠️</span>
+        <div>
+          <strong>Peak Tariff Alert</strong><br>
+          17:00-22:00 • Minimize usage
+        </div>
+      </div>
+    </div>
+
+    <!-- Appliance Schedule -->
+    <div class="card">
+      <h3><span class="icon">⏰</span> Optimal Appliance Schedule</h3>
+
+      <div class="appliance-item">
+        <div class="flex">
+          <h4>Air Conditioner</h4>
+          <div class="power">1.5 kW</div>
+        </div>
+        <p>Power Rating: 1.5 kW</p>
+        <p class="green">Best Hours: 10:00, 11:00, 12:00, 13:00, 14:00, 15:00</p>
+        <p class="red">Avoid Hours: 17:00, 18:00, 19:00, 20:00</p>
+      </div>
+
+      <div class="appliance-item">
+        <div class="flex">
+          <h4>Air Conditioner</h4>
+          <div class="power">1.5 kW</div>
+        </div>
+        <p>Power Rating: 1.5 kW</p>
+        <p class="green">Best Hours: 10:00, 11:00, 12:00, 13:00, 14:00, 15:00</p>
+        <p class="red">Avoid Hours: 17:00, 18:00, 19:00, 20:00</p>
+      </div>
+
+      <!-- Add other appliances similarly... -->
+
+      <!-- Optimization Tips -->
+      <div class="card tips">
+        <h3>⚡ Optimization Tips</h3>
+        <ul>
+          <li>Schedule heavy appliances during solar peak (10:00-16:00).</li>
+          <li>Use timer functions to run appliances in early morning hours.</li>
+          <li>Avoid running multiple high-power appliances during evening peak hours.</li>
+          <li>Batch cooking and cleaning tasks during solar peak hours.</li>
+          <li>Pre-cool spaces before evening peak tariff hours.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

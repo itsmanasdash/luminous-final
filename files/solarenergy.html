@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Energy Generation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, hsl(235, 76%, 15%) 0%, #3e81e5 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            height: 100vh;
+            color: #fff;
+        }
+
+        /* Upper box styling */
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            padding: 25px; /* Padding added */
+            width: 400px;
+            height: 320px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px; /* Margin added */
+            transition: transform 0.3s ease-in-out;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin: 8px 0;
+        }
+
+        #location, #solarData {
+            font-size: 1rem;
+            color: #ffffff;
+            font-weight: 400;
+        }
+
+        /* Chart container styling */
+        .images {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            gap: 10px;
+            width: 90%;
+            margin-top: 20px;
+        }
+
+        /* All images (charts) styling */
+        .images img {
+            width: auto; /* Default width for all images */
+            height: 230px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Resize the 3rd image */
+        .images img:nth-child(2) {
+            width: 140px; /* Smaller width for the third image */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Solar Energy Generation</h1>
+        <br>
+        <br>
+        <br>
+        <!-- <p id="location">Latitude: 21.24654368454523, Longitude: 81.58813268390901</p> -->
+        <p id="latitude">Latitude: 21.24654368454523\n</p>
+        
+        <p id="longitude">Longitude: 81.58813268390901</p>
+        <p id="">Estimated Monthly Solar Energy: <span class="solarData" style="color: rgb(24, 255, 24);">12.5 kWh</span></p>
+    </div>
+
+    <div class="images">
+        <img src="../images/s1.jpeg" alt="Chart 2">
+        <img src="../images/s2.jpeg" alt="Chart 3">
+        <img src="../images/s3.jpeg" alt="Chart 4">
+        <img src="../images/s4.jpeg" alt="Chart 5">
+    </div>
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                document.getElementById("location").innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            // document.getElementById("location").innerHTML = `Latitude: ${lat}, Longitude: ${lon}`;
+            document.getElementById("latitude").innerHTML = `Latitude: ${lat}`;
+            document.getElementById("longitude").innerHTML = `Longitude: ${lon}`;
+
+            const apiKey = 'GaM7ewX7HtTKsbHDxSgSxvBmrH4U0tLD6PLyVSif';
+            fetch(`https://developer.nrel.gov/api/pvwatts/v6.json?api_key=${apiKey}&lat=${lat}&lon=${lon}&system_capacity=4&azimuth=180&tilt=40&array_type=1&module_type=1&losses=10`)
+                .then(response => response.json())
+                .then(data => {
+                    const energy = data.outputs.ac_annual / 12;
+                    document.getElementById("solarData").innerHTML = `${energy.toFixed(2)} kWh`;
+                })
+                .catch(error => {
+                    document.getElementById("solarData").innerHTML = "Error calculating solar energy.";
+                });
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById("location").innerHTML = "User denied the request for Geolocation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById("location").innerHTML = "Location information is unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById("location").innerHTML = "The request to get user location timed out.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    document.getElementById("location").innerHTML = "An unknown error occurred.";
+                    break;
+            }
+        }
+
+        getLocation();
+    </script>
+</body>
+</html>

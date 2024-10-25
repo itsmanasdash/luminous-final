@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Smart Solar Savings Optimizer</title>
+<style>
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 15px;
+  width: calc(33.33% - 20px);
+  min-width: 250px;
+}
+
+.metric {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.appliance-schedule {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.appliance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.appliance-card {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+.power-badge {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.stats-card {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 15px;
+  width: calc(33.33% - 20px);
+  min-width: 250px;
+}
+
+.stats-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.stats-label {
+  font-size: 1.5rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.chart-container {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 30px;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Smart Solar Savings Optimizer</h1>
+      <p>Optimize your appliance usage based on solar generation and time-of-day tariffs</p>
+    </header>
+    <div class="dashboard">
+      <div class="card">
+        <h2>Current Solar Generation</h2>
+        <p class="metric">4.2 kW</p>
+        <p>Peak generation time: 11:00 AM - 2:00 PM</p>
+      </div>
+      <div class="card">
+        <h2>Today's Savings</h2>
+        <p class="metric">₹285</p>
+        <p>Through smart scheduling</p>
+      </div>
+      <div class="card">
+        <h2>Peak Load Shifted</h2>
+        <p class="metric">8.2 kWh</p>
+        <p>Reduced evening peak consumption</p>
+      </div>
+    </div>
+    <div class="appliance-schedule">
+      <h2>Optimal Appliance Schedule</h2>
+      <div class="appliance-grid">
+        <div class="appliance-card">
+          <h3>Air Conditioner</h3>
+          <p class="power-badge">[1.5 kW]</p>
+          <p>Typical usage: 6-8 hours/day</p>
+          <p>Best hours: 10:00 AM - 4:00 PM</p>
+          <p>Avoid: 6:00 PM - 10:00 PM</p>
+          <p>Tip: Pre-cool rooms during solar peak hours</p>
+        </div>
+        <div class="appliance-card">
+          <h3>Water Heater</h3>
+          <p class="power-badge">[2.0 kW]</p>
+          <p>Typical usage: 1-2 hours/day</p>
+          <p>Best hours: 5:00 AM - 7:00 AM</p>
+          <p>Avoid: 6:00 PM - 9:00 PM</p>
+          <p>Tip: Use timer function for early morning heating</p>
+        </div>
+        <!-- Add more appliance cards here -->
+      </div>
+    </div>
+    <div class="chart-container">
+      <h2>15-Day Cost Comparison</h2>
+      <!-- Add chart here -->
+    </div>
+    <div class="chart-container">
+      <h2>Today's Generation Pattern</h2>
+      <!-- Add chart here -->
+    </div>
+  </div>
+  <script>
+    // Add JavaScript code here to update the charts and metrics in real-time
+    // Fetch the data from the file
+        fetch('data.csv')
+        .then(response => response.text())
+        .then(data => {
+            // Parse the data into an array of objects
+            const dataArray = data.split('\n').map(row => {
+            const columns = row.split(',');
+            return {
+                date: columns[0],
+                solarPower: parseFloat(columns[1]),
+                solarEnergy: parseFloat(columns[2]),
+                energyConsumption: parseFloat(columns[3])
+            };
+            });
+
+            // Update the metrics
+            const currentSolarGeneration = dataArray[dataArray.length - 1].solarPower;
+            const todaysSavings = calculateTodaysSavings(dataArray);
+            const peakLoadShifted = calculatePeakLoadShifted(dataArray);
+
+            document.querySelector('.metric.current-solar-generation').textContent = `${currentSolarGeneration} kW`;
+            document.querySelector('.metric.todays-savings').textContent = `₹${todaysSavings}`;
+            document.querySelector('.metric.peak-load-shifted').textContent = `${peakLoadShifted} kWh`;
+
+            // Update the charts
+            updateChart1(dataArray);
+            updateChart2(dataArray);
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+        // Calculate today's savings
+        function calculateTodaysSavings(dataArray) {
+        // Implement the logic to calculate today's savings based on the data
+        // For example:
+        const todaysData = dataArray.filter(row => row.date === '2023-03-01');
+        const totalSolarEnergy = todaysData.reduce((acc, row) => acc + row.solarEnergy, 0);
+        const totalEnergyConsumption = todaysData.reduce((acc, row) => acc + row.energyConsumption, 0);
+        return totalSolarEnergy - totalEnergyConsumption;
+        }
+
+        // Calculate peak load shifted
+        function calculatePeakLoadShifted(dataArray) {
+        // Implement the logic to calculate peak load shifted based on the data
+        // For example:
+        const peakLoadData = dataArray.filter(row => row.date === '2023-03-01' && row.solarPower > 4);
+        const totalPeakLoad = peakLoadData.reduce((acc, row) => acc + row.solarPower, 0);
+        return totalPeakLoad;
+        }
+
+        // Update chart 1
+        function updateChart1(dataArray) {
+        // Implement the logic to update chart 1 based on the data
+        // For example:
+        const chartData = dataArray.map(row => ({ x: row.date, y: row.solarPower }));
+        // Use a charting library like Chart.js to update the chart
+        }
+
+        // Update chart 2
+        function updateChart2(dataArray) {
+        // Implement the logic to update chart 2 based on the data
+        // For example:
+        const chartData = dataArray.map(row => ({ x: row.date, y: row.energyConsumption }));
+        // Use a charting library like Chart.js to update the chart
+        }
+  </script>
+</body>
+</html>

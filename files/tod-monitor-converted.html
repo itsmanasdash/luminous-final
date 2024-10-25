@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Energy & ToD Tariff Monitor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .body{
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+        }
+        .min-h-screen {
+            min-height: 100vh;
+        }
+
+        .bg-gray-100 {
+            /* background-color: #f3f4f6; */
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+        }
+
+        .p-6 {
+            padding: 1.5rem;
+        }
+
+        .max-w-7xl {
+            max-width: 80rem;
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        /* .text-gray-500{
+            color: red;
+        } */
+        .text-red-600{
+            color: rgba(255, 0, 0, 0.778);
+        }
+
+        .text-gray-900 {
+            color: white;
+        }
+
+        .text-gray-600 {
+            color: rgba(255, 255, 255, 0.665);
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        .gap-6 {
+            gap: 1.5rem;
+        }
+
+        .card {
+            /* background: white; */
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .font-medium {
+            font-weight: 500;
+        }
+
+        .text-gray-500{
+            color: rgba(240, 248, 255, 0.785);
+        }
+
+        .text-2xl {
+            font-size: 1.5rem;
+        }
+
+        .text-green-600 {
+            color: #22c55e;
+        }
+        .text-yellow-600{
+            color: rgba(255, 255, 0, 0.778);
+        }
+
+        .text-red-500 {
+            color: #ef4444;
+        }
+        .text-blue-600{
+            color: rgba(0, 0, 255, 0.778);
+        }
+
+        .chart-container {
+            background : rgb(255, 255, 255);
+            height: 24rem;
+            margin-bottom: 2rem;
+            color: aliceblue;
+        }
+
+        .tariff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .tariff-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .icon {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid-stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen bg-gray-100 p-6">
+        <div class="max-w-7xl mx-auto">
+            <header class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">Solar Energy & ToD Tariff Monitor</h1>
+                <p class="text-gray-600">Real-time monitoring of energy consumption and tariff rates</p>
+            </header>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-stats gap-6 mb-8">
+                <div class="card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Current Tariff Rate</p>
+                            <p class="text-2xl font-bold text-gray-600" id="currentRate">₹0/kWh</p>
+                            <p class="text-sm text-gray-500" id="currentPeriod">Loading...</p>
+                        </div>
+                        <span class="icon">💰</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Solar Generation</p>
+                            <p class="text-2xl font-bold text-gray-600">4.2 kW</p>
+                            <p class="text-sm text-green-600">+12% from yesterday</p>
+                        </div>
+                        <span class="icon">☀️</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Current Usage</p>
+                            <p class="text-2xl font-bold text-gray-600">2.8 kW</p>
+                            <p class="text-sm text-red-500">Peak hours ahead</p>
+                        </div>
+                        <span class="icon">🔋</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Today's Savings</p>
+                            <p class="text-2xl font-bold text-gray-600">₹285</p>
+                            <p class="text-sm text-green-600">Through optimization</p>
+                        </div>
+                        <span class="icon">⏰</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Chart -->
+            <div class="card mb-8">
+                <h2 class="text-xl font-bold mb-4 text-gray-500">Energy Usage vs. Generation</h2>
+                <br>
+                <div class="chart-container">
+                    <canvas id="energyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Tariff Schedule -->
+            <div class="card">
+                <h2 class="text-xl font-bold mb-4 text-gray-500">Today's Tariff Schedule</h2>
+                <div class="tariff-grid">
+                    <div class="tariff-card">
+                        <h3 class="font-medium text-gray-600">Off-Peak Hours</h3>
+                        <p class="text-sm text-gray-500">10 PM - 6 AM</p>
+                        <p class="text-lg font-bold text-green-600">₹4/kWh</p>
+                    </div>
+                    <div class="tariff-card">
+                        <h3 class="font-medium text-gray-600">Mid-Peak Hours</h3>
+                        <p class="text-sm text-gray-500">6 AM - 10 AM</p>
+                        <p class="text-lg font-bold text-green-600">₹8/kWh</p>
+                    </div>
+                    <div class="tariff-card">
+                        <h3 class="font-medium text-gray-600">Standard Hours</h3>
+                        <p class="text-sm text-gray-500">10 AM - 6 PM</p>
+                        <p class="text-lg font-bold text-green-600">₹6/kWh</p>
+                    </div>
+                    <div class="tariff-card">
+                        <h3 class="font-medium text-gray-600">Peak Hours</h3>
+                        <p class="text-sm text-gray-500">6 PM - 10 PM</p>
+                        <p class="text-lg font-bold text-red-600">₹12/kWh</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        const sampleData = [
+            { time: '2024-07-01 00:00', solarPower: 0, consumption: 2.1 },
+            { time: '2024-07-01 06:00', solarPower: 0.5, consumption: 3.2 },
+            { time: '2024-07-01 12:00', solarPower: 4.2, consumption: 2.8 },
+            { time: '2024-07-01 18:00', solarPower: 1.2, consumption: 4.5 },
+        ];
+
+        // Initialize chart
+        const ctx = document.getElementById('energyChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: sampleData.map(d => new Date(d.time).toLocaleTimeString()),
+                datasets: [
+                    {
+                        label: 'Solar Generation',
+                        data: sampleData.map(d => d.solarPower),
+                        borderColor: '#22c55e',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Consumption',
+                        data: sampleData.map(d => d.consumption),
+                        borderColor: '#ef4444',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Power (kW)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Update current tariff rate and period
+        function updateTariffInfo() {
+            const hour = new Date().getHours();
+            const currentRateElement = document.getElementById('currentRate');
+            const currentPeriodElement = document.getElementById('currentPeriod');
+
+            let rate, period;
+            if (hour >= 22 || hour < 6) {
+                rate = 4;
+                period = 'Off-Peak';
+            } else if (hour >= 6 && hour < 10) {
+                rate = 8;
+                period = 'Mid-Peak';
+            } else if (hour >= 18 && hour < 22) {
+                rate = 12;
+                period = 'Peak';
+            } else {
+                rate = 6;
+                period = 'Standard';
+            }
+
+            currentRateElement.textContent = `₹${rate}/kWh`;
+            currentPeriodElement.textContent = period;
+        }
+
+        // Update tariff info every minute
+        updateTariffInfo();
+        setInterval(updateTariffInfo, 60000);
+    </script>
+</body>
+</html>

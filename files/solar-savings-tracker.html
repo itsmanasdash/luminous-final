@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Smart Savings Tracker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/api/placeholder/1920/1080') center/cover;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .grid-cols-3 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .stats-card h3 {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .stats-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4fc3f7;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.3);
+        }
+
+        .stats-label {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .appliance-schedule {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .appliance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            transition: background 0.3s ease;
+        }
+
+        .appliance-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .optimal-hours {
+            color: #81c784;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #4fc3f7, 0 0 10px #4fc3f7;
+            }
+            to {
+                text-shadow: 0 0 10px #4fc3f7, 0 0 20px #4fc3f7;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="glow">Smart Solar Savings Tracker</h1>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-3">
+            <div class="card stats-card">
+                <h3>Today's Savings</h3>
+                <div class="stats-value">₹285</div>
+                <div class="stats-label">Through smart scheduling</div>
+            </div>
+            <div class="card stats-card">
+                <h3>Daily Generation</h3>
+                <div class="stats-value">12.5 kWh</div>
+                <div class="stats-label">Current solar output</div>
+            </div>
+            <div class="card stats-card">
+                <h3>Peak Load Shifted</h3>
+                <div class="stats-value">8.2 kWh</div>
+                <div class="stats-label">Today's optimization</div>
+            </div>
+        </div>
+
+        <!-- 15-Day Cost Comparison -->
+        <div class="chart-container">
+            <h2>15-Day Cost Comparison</h2>
+            <canvas id="fifteenDayChart"></canvas>
+        </div>
+
+        <!-- Daily Generation Pattern -->
+        <div class="chart-container">
+            <h2>Today's Generation Pattern</h2>
+            <canvas id="generationChart"></canvas>
+        </div>
+
+        <!-- Appliance Schedule -->
+        <div class="card">
+            <h2>Optimal Appliance Schedule</h2>
+            <div class="appliance-schedule" id="applianceSchedule">
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Generate 15-day comparison data
+        const generateFifteenDayData = () => {
+            const dates = Array.from({length: 15}, (_, i) => {
+                const date = new Date();
+                date.setDate(date.getDate() - (14 - i));
+                return date.toLocaleDateString('en-IN', {day: 'numeric', month: 'short'});
+            });
+
+            const conventionalCosts = dates.map(() => Math.floor(250 + Math.random() * 50));
+            const optimizedCosts = conventionalCosts.map(cost => Math.floor(cost * (0.6 + Math.random() * 0.1)));
+
+            return { dates, conventionalCosts, optimizedCosts };
+        };
+
+        // Generate hourly generation data
+        const generateHourlyData = () => {
+            return Array.from({length: 24}, (_, hour) => {
+                if (hour >= 6 && hour <= 18) {
+                    const peak = Math.sin((hour - 6) * Math.PI / 12) * 1.5;
+                    return Math.max(0, peak + Math.random() * 0.2);
+                }
+                return 0;
+            });
+        };
+
+        // 15-Day Comparison Chart
+        const fifteenDayData = generateFifteenDayData();
+        const fifteenDayCtx = document.getElementById('fifteenDayChart').getContext('2d');
+        new Chart(fifteenDayCtx, {
+            type: 'bar',
+            data: {
+                labels: fifteenDayData.dates,
+                datasets: [{
+                    label: 'Without Optimization (₹)',
+                    data: fifteenDayData.conventionalCosts,
+                    backgroundColor: '#ff7043',
+                }, {
+                    label: 'With Optimization (₹)',
+                    data: fifteenDayData.optimizedCosts,
+                    backgroundColor: '#4fc3f7',
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#fff'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#fff'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#fff'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Generation Pattern Chart
+        const generationCtx = document.getElementById('generationChart').getContext('2d');
+        const hourlyData = generateHourlyData();
+        new Chart(generationCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 24}, (_, i) => `${i}:00`),
+                datasets: [{
+                    label: 'Solar Generation (kW)',
+                    data: hourlyData,
+                    borderColor: '#4fc3f7',
+                    backgroundColor: 'rgba(79, 195, 247, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#fff'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#fff'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#fff'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Populate Appliance Schedule
+        const appliances = [
+            { name: 'Air Conditioner', power: '1.5 kW', optimalHours: '10:00 - 16:00', savings: '₹45/day' },
+            { name: 'Water Heater', power: '2.0 kW', optimalHours: '10:00 - 14:00', savings: '₹55/day' },
+            { name: 'Washing Machine', power: '0.6 kW', optimalHours: '11:00 - 15:00', savings: '₹25/day' },
+            { name: 'Iron', power: '1.0 kW', optimalHours: '10:00 - 13:00', savings: '₹30/day' }
+        ];
+
+        const applianceSchedule = document.getElementById('applianceSchedule');
+        appliances.forEach(appliance => {
+            const div = document.createElement('div');
+            div.className = 'appliance-item';
+            div.innerHTML = `
+                <div>
+                    <h3>${appliance.name}</h3>
+                    <p class="optimal-hours">Best hours: ${appliance.optimalHours}</p>
+                </div>
+                <div>
+                    <p>${appliance.power}</p>
+                    <p style="color: #81c784">${appliance.savings}</p>
+                </div>
+            `;
+            applianceSchedule.appendChild(div);
+        });
+    </script>
+</body>
+</html>
